@@ -8,6 +8,9 @@ public class TankAi : MonoBehaviour
     private Transform player,
         playerBase;
 
+    private int idleTime,
+        searchingRadius;
+
     private enum BehaviourState
     {
         Idle,
@@ -32,5 +35,17 @@ public class TankAi : MonoBehaviour
         tankIdler.Init(player, playerBase, target);
         controllers.Add(BehaviourState.Idle, tankIdler);
         tankIdler.Activate();
+        StartCoroutine(IdleTimer());
+    }
+
+    IEnumerator IdleTimer()
+    {
+        WaitForSecondsRealtime second = new WaitForSecondsRealtime(1);
+
+        for (int timeLeft = idleTime; timeLeft > 0; timeLeft--)
+        {
+            yield return second;
+        }
+        currentState++;
     }
 }
