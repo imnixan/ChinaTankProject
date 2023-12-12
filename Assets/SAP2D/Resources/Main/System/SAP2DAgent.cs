@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SAP2D {
-
+namespace SAP2D
+{
     [AddComponentMenu("Pathfinding 2D/SAP2D Agent")]
     public class SAP2DAgent : MonoBehaviour
     {
@@ -13,16 +13,19 @@ namespace SAP2D {
 
         [Space(10)]
         public bool CanMove = true;
+
         [Range(0, 1000)]
         public float MovementSpeed = 5;
+
         [Range(0, 1000)]
         public float RotationSpeed = 500;
 
-
         [HideInInspector]
         public bool isMoving;
+
         [HideInInspector]
         public int pathIndex; //current tile index
+
         [HideInInspector]
         public Vector3 posInGrid;
 
@@ -36,11 +39,11 @@ namespace SAP2D {
         public Color32 color = new Color32(0, 213, 225, 255);
 
         [HideInInspector]
-        public Vector2[] path;     //array of path tiles
+        public Vector2[] path; //array of path tiles
         private bool changeSearch; //true, if parameter CanSearch was changed
         private SAP2DPathfinder pathfinder;
 
-        private SAP_GridSource grid;
+        public SAP_GridSource grid;
 
         private void Start()
         {
@@ -77,16 +80,13 @@ namespace SAP2D {
 
                 if (!CanSearch && changeSearch)
                 {
-
                     StopAllCoroutines();
                     path = null;
 
                     changeSearch = false;
-
                 }
                 else if (CanSearch && !changeSearch)
                 {
-
                     StartCoroutine(FindPath());
 
                     changeSearch = true;
@@ -94,16 +94,17 @@ namespace SAP2D {
 
                 if (CanMove)
                     Move();
-
             }
         }
 
         private IEnumerator FindPath()
         { //path loop update
-
             if (isTargetWalkable())
                 //if the object is already in the target point, the path should not be searched
-                if (grid.GetTileDataAtWorldPosition(transform.position).WorldPosition != grid.GetTileDataAtWorldPosition(Target.position).WorldPosition)
+                if (
+                    grid.GetTileDataAtWorldPosition(transform.position).WorldPosition
+                    != grid.GetTileDataAtWorldPosition(Target.position).WorldPosition
+                )
                 {
                     path = pathfinder.FindPath(transform.position, Target.position, Config);
                     pathIndex = 0;
@@ -117,7 +118,9 @@ namespace SAP2D {
         { //object movement
             if (Target != null)
             {
-                Vector3 targetVector = grid.GetTileDataAtWorldPosition(Target.position).WorldPosition; //target tile position
+                Vector3 targetVector = grid.GetTileDataAtWorldPosition(
+                    Target.position
+                ).WorldPosition; //target tile position
 
                 if (CanSearch)
                 {
@@ -125,18 +128,26 @@ namespace SAP2D {
                     {
                         if (path != null && path.Length > 0)
                         {
-
-                            Vector3 currentTargetVector = grid.GetTileDataAtWorldPosition(path[pathIndex]).WorldPosition; //current tile position
+                            Vector3 currentTargetVector = grid.GetTileDataAtWorldPosition(
+                                path[pathIndex]
+                            ).WorldPosition; //current tile position
 
                             Vector3 dir = currentTargetVector - transform.position; //direction of turn towards the current tile
                             Rotate(dir);
 
                             //line movement to current tile
-                            transform.position = Vector2.MoveTowards(transform.position, currentTargetVector, Time.deltaTime * MovementSpeed);
+                            transform.position = Vector2.MoveTowards(
+                                transform.position,
+                                currentTargetVector,
+                                Time.deltaTime * MovementSpeed
+                            );
 
-                            if (Vector2.Distance(transform.position, currentTargetVector) < GetNextPointDistance)
+                            if (
+                                Vector2.Distance(transform.position, currentTargetVector)
+                                < GetNextPointDistance
+                            )
                             { //if the object has approached a sufficient distance,
-                                if (pathIndex < path.Length - 1)                                                     //to move to the next tile
+                                if (pathIndex < path.Length - 1) //to move to the next tile
                                     pathIndex++;
                             }
                         }
@@ -150,7 +161,11 @@ namespace SAP2D {
                         Rotate(dir);
 
                         //line movement to target
-                        transform.position = Vector2.MoveTowards(transform.position, targetVector, Time.deltaTime * MovementSpeed);
+                        transform.position = Vector2.MoveTowards(
+                            transform.position,
+                            targetVector,
+                            Time.deltaTime * MovementSpeed
+                        );
                     }
                 }
             }
@@ -160,7 +175,11 @@ namespace SAP2D {
         {
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, q, Time.deltaTime * RotationSpeed);
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                q,
+                Time.deltaTime * RotationSpeed
+            );
         }
 
         private bool isTargetWalkable()
@@ -172,7 +191,6 @@ namespace SAP2D {
         {
             if (ShowGraphic)
             {
-
                 Gizmos.color = color;
 
                 if (CanSearch)
@@ -189,7 +207,10 @@ namespace SAP2D {
                 }
                 else
                 {
-                    Gizmos.DrawLine(transform.position, grid.GetTileDataAtWorldPosition(Target.position).WorldPosition);
+                    Gizmos.DrawLine(
+                        transform.position,
+                        grid.GetTileDataAtWorldPosition(Target.position).WorldPosition
+                    );
                 }
 
                 Gizmos.DrawWireSphere(transform.position, GetNextPointDistance);
@@ -197,4 +218,3 @@ namespace SAP2D {
         }
     }
 }
-

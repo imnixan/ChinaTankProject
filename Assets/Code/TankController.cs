@@ -7,15 +7,27 @@ public abstract class TankController : MonoBehaviour
     protected Transform player;
     protected Transform playerBase;
 
-    public void Init(TankMover tankMover, Transform player, Transform playerBase)
+    [SerializeField]
+    protected Transform target;
+    protected bool inAction;
+
+    public void Init(Transform player, Transform playerBase, Transform target)
     {
-        this.tankMover = tankMover;
+        this.tankMover = GetComponent<TankMover>();
         this.player = player;
         this.playerBase = playerBase;
+        this.target = target;
     }
 
     public void Stop()
     {
         tankMover.StopMoving();
+        this.enabled = false;
+    }
+
+    public void Activate()
+    {
+        tankMover.Move();
+        this.enabled = true;
     }
 }
