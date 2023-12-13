@@ -34,7 +34,7 @@ public class TankAi : MonoBehaviour
         TankIdler tankIdler = gameObject.AddComponent<TankIdler>();
         tankIdler.Init(player, playerBase, target);
         controllers.Add(BehaviourState.Idle, tankIdler);
-        tankIdler.Activate();
+        tankIdler.Play();
         StartCoroutine(IdleTimer());
     }
 
@@ -46,6 +46,13 @@ public class TankAi : MonoBehaviour
         {
             yield return second;
         }
+        NextState();
+    }
+
+    public void NextState()
+    {
+        controllers[currentState].Stop();
         currentState++;
+        //controllers[currentState].Play();
     }
 }

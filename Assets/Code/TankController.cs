@@ -25,7 +25,7 @@ public abstract class TankController : MonoBehaviour
         this.enabled = false;
     }
 
-    public void Activate()
+    public void Play()
     {
         tankMover.Move();
         this.enabled = true;
