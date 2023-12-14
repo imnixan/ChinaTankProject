@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class TankIdler : TankController
 {
+    public override void Play()
+    {
+        base.Play();
+        Debug.Log($"{gameObject.name} start random moving");
+        SetNewTarget();
+    }
+
     private void FixedUpdate()
     {
         if (target != null)

@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 3811850537062345800}
   - component: {fileID: 3811850537062345801}
   - component: {fileID: 5128136717888962995}
+  - component: {fileID: 1817754483054878653}
+  - component: {fileID: 9221826668955367281}
+  - component: {fileID: 289329731457306613}
   m_Layer: 7
   m_Name: EnemyTank
   m_TagString: Tank
@@ -152,6 +155,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5, type: 3}
+--- !u!114 &1817754483054878653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811850537062345796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38af5e3ef00f3634f8a5bde29f831697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+--- !u!114 &9221826668955367281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811850537062345796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ba5687eaad2ca442b043115645bb849, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+--- !u!114 &289329731457306613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811850537062345796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16f52951f94b1b4880de2f12bd6b190, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3811850537571681341
 GameObject:
   m_ObjectHideFlags: 0

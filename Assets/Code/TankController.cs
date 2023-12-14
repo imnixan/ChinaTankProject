@@ -17,6 +17,7 @@ public abstract class TankController : MonoBehaviour
         this.player = player;
         this.playerBase = playerBase;
         this.target = target;
+        this.enabled = false;
     }
 
     public void Stop()
@@ -25,7 +26,7 @@ public abstract class TankController : MonoBehaviour
         this.enabled = false;
     }
 
-    public void Play()
+    public virtual void Play()
     {
         tankMover.Move();
         this.enabled = true;

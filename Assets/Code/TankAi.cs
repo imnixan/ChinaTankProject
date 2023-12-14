@@ -8,17 +8,22 @@ public class TankAi : MonoBehaviour
     private Transform player,
         playerBase;
 
-    private int idleTime,
-        searchingRadius;
+    private int idleTime = 20;
+    private int searchingTime = 20;
     private Attacker attacker;
     private RaycastHit2D hit;
-    private int playerLayer = ~1 << 7;
+    private int ignoreLayer = ~(1 << 7);
+    private bool aiming;
+    private float shootTime;
+    private float aimTime = 0.5f;
+    public float maxVertZone,
+        maxHorZone;
 
     private enum BehaviourState
     {
-        Idle,
-        SearchingPlayer,
-        SearchingBase
+        Idle = 0,
+        SearchingPlayer = 1,
+        SearchingBase = 2
     }
 
     private BehaviourState currentState;
@@ -26,20 +31,36 @@ public class TankAi : MonoBehaviour
     private Dictionary<BehaviourState, TankController> controllers =
         new Dictionary<BehaviourState, TankController>();
     private TankMover tankMover;
+    public float yDistance,
+        xDistance;
 
     private void Start()
     {
+        Vector2 camsize = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+        maxHorZone = camsize.x;
+        maxVertZone = camsize.y;
+
+        player = GameObject.FindWithTag("Player").transform;
+        playerBase = FindAnyObjectByType<PlayerBase>().transform;
         attacker = GetComponent<Attacker>();
         Transform target = new GameObject(gameObject.name + "_Target").transform;
         target.position = transform.position;
-        tankMover = gameObject.AddComponent<TankMover>();
+        tankMover = GetComponent<TankMover>();
         tankMover.Init(target);
 
-        TankIdler tankIdler = gameObject.AddComponent<TankIdler>();
+        TankIdler tankIdler = GetComponent<TankIdler>();
         tankIdler.Init(player, playerBase, target);
         controllers.Add(BehaviourState.Idle, tankIdler);
         tankIdler.Play();
-        //StartCoroutine(IdleTimer());
+        StartCoroutine(IdleTimer());
+
+        PlayerSearcher playerSearcher = GetComponent<PlayerSearcher>();
+        playerSearcher.Init(player, playerBase, target);
+        controllers.Add(BehaviourState.SearchingPlayer, playerSearcher);
+
+        BaseSearcher baseSearhcer = GetComponent<BaseSearcher>();
+        baseSearhcer.Init(player, player, target);
+        controllers.Add(BehaviourState.SearchingBase, baseSearhcer);
     }
 
     IEnumerator IdleTimer()
@@ -53,34 +74,107 @@ public class TankAi : MonoBehaviour
         NextState();
     }
 
+    IEnumerator PlayerSearcherTimer()
+    {
+        WaitForSecondsRealtime second = new WaitForSecondsRealtime(1);
+
+        for (int timeLeft = searchingTime; timeLeft > 0; timeLeft--)
+        {
+            yield return second;
+        }
+        NextState();
+    }
+
+    public void StartSearchTimer()
+    {
+        StartCoroutine(PlayerSearcherTimer());
+    }
+
     public void NextState()
     {
         controllers[currentState].Stop();
-        currentState++;
-        //controllers[currentState].Play();
+        if (currentState != BehaviourState.SearchingBase)
+        {
+            currentState++;
+        }
+        controllers[currentState].Play();
     }
 
     private void Update()
     {
-        hit = Physics2D.Raycast(transform.position, Vector2.up, Mathf.Infinity, playerLayer);
-        if (hit.collider != null)
+        xDistance = Mathf.Abs(player.position.x - transform.position.x);
+        yDistance = Mathf.Abs(player.position.y - transform.position.y);
+        if (yDistance < maxVertZone && xDistance < maxHorZone)
         {
-            CheckPlayer(hit);
+            hit = Physics2D.Raycast(
+                transform.position,
+                player.position - transform.position,
+                Mathf.Infinity,
+                ignoreLayer
+            );
+
+            if (hit.collider != null)
+            {
+                CheckPlayer(hit);
+                return;
+            }
         }
-        hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, playerLayer);
-        if (hit.collider != null)
+        else
         {
-            CheckPlayer(hit);
+            CheckBase();
+            if (!controllers[currentState].enabled)
+            {
+                controllers[currentState].Play();
+            }
         }
-        hit = Physics2D.Raycast(transform.position, Vector2.left, Mathf.Infinity, playerLayer);
-        if (hit.collider != null)
+    }
+
+    private void CheckBase()
+    {
+        if (Vector2.Distance(transform.position, playerBase.transform.position) < 6)
         {
-            CheckPlayer(hit);
+            hit = hit = Physics2D.Raycast(
+                transform.position,
+                playerBase.position - transform.position,
+                Mathf.Infinity,
+                ignoreLayer
+            );
+
+            if (hit.collider != null && hit.collider.CompareTag("Base"))
+            {
+                controllers[currentState].Stop();
+                Vector2 directionView = (
+                    playerBase.transform.position - transform.position
+                ).normalized;
+                transform.right = Vector2.MoveTowards(transform.right, directionView, 0.01f);
+                if ((Vector2)transform.right == directionView && attacker.CanAttack)
+                {
+                    if (!aiming)
+                    {
+                        shootTime = Time.time + aimTime / 2;
+                        aiming = true;
+                        Debug.Log($"{gameObject.name} start aiming base");
+                    }
+                    if (aiming && shootTime <= Time.time)
+                    {
+                        aiming = false;
+                        attacker.Fire(transform.right);
+                    }
+                }
+                else
+                {
+                    aiming = false;
+                }
+            }
         }
-        hit = Physics2D.Raycast(transform.position, Vector2.right, Mathf.Infinity, playerLayer);
-        if (hit.collider != null)
+        else if (!controllers[currentState].enabled)
         {
-            CheckPlayer(hit);
+            aiming = false;
+            controllers[currentState].Play();
+        }
+        else
+        {
+            aiming = false;
         }
     }
 
@@ -89,16 +183,30 @@ public class TankAi : MonoBehaviour
         if (hit.collider.CompareTag("Player"))
         {
             controllers[currentState].Stop();
-            transform.right = hit.collider.transform.position - transform.position;
-            if (attacker.CanAttack)
+            Vector2 directionView = (player.transform.position - transform.position).normalized;
+            transform.right = Vector2.MoveTowards(transform.right, directionView, 0.01f);
+            if ((Vector2)transform.right == directionView && attacker.CanAttack)
             {
-                attacker.Fire(transform.right * 100);
+                if (!aiming)
+                {
+                    shootTime = Time.time + aimTime;
+                    aiming = true;
+                    Debug.Log($"{gameObject.name} start aiming player");
+                }
+                if (aiming && shootTime <= Time.time)
+                {
+                    aiming = false;
+                    attacker.Fire(transform.right);
+                }
             }
             else
             {
-                controllers[currentState].Play();
-                //NextState();
+                aiming = false;
             }
+        }
+        else
+        {
+            CheckBase();
         }
     }
 }

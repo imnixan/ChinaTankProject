@@ -9,7 +9,7 @@ public class Attacker : MonoBehaviour
     [SerializeField]
     private Projectile projectile;
 
-    private float lastShot;
+    public float lastShot;
 
     private float recharge = 1.5f;
     public bool CanAttack
@@ -33,7 +33,7 @@ public class Attacker : MonoBehaviour
         if (CanAttack)
         {
             Instantiate(projectile, transform.position + transform.up * 0.5f, new Quaternion())
-                .Shoot(direction);
+                .Shoot(direction * 100);
             lastShot = Time.time;
         }
     }

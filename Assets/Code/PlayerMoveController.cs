@@ -4,6 +4,10 @@ public class PlayerMoveController : MonoBehaviour
 {
     [SerializeField]
     private float speed;
+
+    [SerializeField]
+    private Joystick joystick;
+
     private Rigidbody2D rb;
 
     private float leftForce,
@@ -60,8 +64,8 @@ public class PlayerMoveController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        moveDirection.x = leftForce + rightForce;
-        moveDirection.y = upForce + downForce;
+        moveDirection.x = joystick.Horizontal * speed;
+        moveDirection.y = joystick.Vertical * speed;
         if (moveDirection != Vector2.zero)
         {
             transform.up = moveDirection;
