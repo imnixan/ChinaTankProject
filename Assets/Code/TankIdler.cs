@@ -45,4 +45,12 @@ public class TankIdler : TankController
             SetNewTarget();
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Tank"))
+        {
+            SetNewTarget();
+        }
+    }
 }

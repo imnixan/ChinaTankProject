@@ -10,6 +10,9 @@ public class TankAi : MonoBehaviour
 
     private int idleTime,
         searchingRadius;
+    private Attacker attacker;
+    private RaycastHit2D hit;
+    private int playerLayer = ~1 << 7;
 
     private enum BehaviourState
     {
@@ -26,6 +29,7 @@ public class TankAi : MonoBehaviour
 
     private void Start()
     {
+        attacker = GetComponent<Attacker>();
         Transform target = new GameObject(gameObject.name + "_Target").transform;
         target.position = transform.position;
         tankMover = gameObject.AddComponent<TankMover>();
@@ -35,7 +39,7 @@ public class TankAi : MonoBehaviour
         tankIdler.Init(player, playerBase, target);
         controllers.Add(BehaviourState.Idle, tankIdler);
         tankIdler.Play();
-        StartCoroutine(IdleTimer());
+        //StartCoroutine(IdleTimer());
     }
 
     IEnumerator IdleTimer()
@@ -54,5 +58,47 @@ public class TankAi : MonoBehaviour
         controllers[currentState].Stop();
         currentState++;
         //controllers[currentState].Play();
+    }
+
+    private void Update()
+    {
+        hit = Physics2D.Raycast(transform.position, Vector2.up, Mathf.Infinity, playerLayer);
+        if (hit.collider != null)
+        {
+            CheckPlayer(hit);
+        }
+        hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, playerLayer);
+        if (hit.collider != null)
+        {
+            CheckPlayer(hit);
+        }
+        hit = Physics2D.Raycast(transform.position, Vector2.left, Mathf.Infinity, playerLayer);
+        if (hit.collider != null)
+        {
+            CheckPlayer(hit);
+        }
+        hit = Physics2D.Raycast(transform.position, Vector2.right, Mathf.Infinity, playerLayer);
+        if (hit.collider != null)
+        {
+            CheckPlayer(hit);
+        }
+    }
+
+    private void CheckPlayer(RaycastHit2D hit)
+    {
+        if (hit.collider.CompareTag("Player"))
+        {
+            controllers[currentState].Stop();
+            transform.right = hit.collider.transform.position - transform.position;
+            if (attacker.CanAttack)
+            {
+                attacker.Fire(transform.right * 100);
+            }
+            else
+            {
+                controllers[currentState].Play();
+                //NextState();
+            }
+        }
     }
 }
