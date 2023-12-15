@@ -40,6 +40,6 @@ public class CameraFollow : MonoBehaviour
         {
             camPos.x = transform.position.x;
         }
-        camera.transform.position = camPos;
+        camera.transform.position = Vector3.MoveTowards(camera.transform.position, camPos, 0.1f);
     }
 }

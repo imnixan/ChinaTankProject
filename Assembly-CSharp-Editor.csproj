@@ -56,16 +56,16 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Joystick Pack\Scripts\Editor\VariableJoystickEditor.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\Editor\SAP2DDynamicObstacleEditor.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\Editor\SAP2DGridEditorWindow.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\Editor\SAP2DPathfindingConfigEditor.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\Editor\UserGridDataLoader.cs" />
+    <Compile Include="Assets\Joystick Pack\Scripts\Editor\DynamicJoystickEditor.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\Editor\SAP2DAboutWindow.cs" />
-    <Compile Include="Assets\SAP2D\Resources\Main\Editor\SAP2DPathfinderEditor.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Editor\FloatingJoystickEditor.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Editor\JoystickEditor.cs" />
-    <Compile Include="Assets\Joystick Pack\Scripts\Editor\DynamicJoystickEditor.cs" />
-    <Compile Include="Assets\Joystick Pack\Scripts\Editor\VariableJoystickEditor.cs" />
+    <Compile Include="Assets\SAP2D\Resources\Main\Editor\SAP2DPathfinderEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -844,6 +844,10 @@
       <Project>{B1DDFCBA-AFD6-5897-18CB-34A0FE1A24A1}</Project>
       <Name>Unity.VisualScripting.State.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="KinoBloom.Runtime.csproj">
+      <Project>{E4398A57-F3ED-49B8-65B0-1A6B1E5ACC9A}</Project>
+      <Name>KinoBloom.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Burst.Editor.csproj">
       <Project>{CDCB71F5-F822-1565-944E-663DEE69588F}</Project>
       <Name>Unity.Burst.Editor</Name>
@@ -868,10 +872,6 @@
       <Project>{E125B21F-8BFA-51C7-544C-6AA926942DA5}</Project>
       <Name>Unity.2D.Psdimporter.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="KinoBloom.Runtime.csproj">
-      <Project>{E4398A57-F3ED-49B8-65B0-1A6B1E5ACC9A}</Project>
-      <Name>KinoBloom.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="CFXRDemo.csproj">
       <Project>{C9657E51-5699-3333-E2EC-F48FF4A78245}</Project>
       <Name>CFXRDemo</Name>
@@ -879,6 +879,10 @@
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{6CB54769-1BAC-EF33-72C0-4F6DB447E11E}</Project>
       <Name>UnityEditor.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.2D.Tilemap.Extras.Editor.csproj">
+      <Project>{DC93A3D9-C55E-C8A1-F8C7-5474C647A319}</Project>
+      <Name>Unity.2D.Tilemap.Extras.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.InternalAPIEditorBridge.001.csproj">
       <Project>{C8C3B642-D34F-3EC2-E4A6-D6A29E47188C}</Project>
@@ -888,17 +892,13 @@
       <Project>{A57EC092-FAA3-3BF5-2D97-4F176B20A886}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.2D.Tilemap.Extras.Editor.csproj">
-      <Project>{DC93A3D9-C55E-C8A1-F8C7-5474C647A319}</Project>
-      <Name>Unity.2D.Tilemap.Extras.Editor</Name>
+    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
+      <Project>{AB31B5E1-EEF4-B295-A144-6D042A77D182}</Project>
+      <Name>Unity.2D.Sprite.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.Flow.csproj">
       <Project>{FAFAC807-DC2F-BFB4-0124-491DB62DD033}</Project>
       <Name>Unity.VisualScripting.Flow</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
-      <Project>{AB31B5E1-EEF4-B295-A144-6D042A77D182}</Project>
-      <Name>Unity.2D.Sprite.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.Core.csproj">
       <Project>{88F276E1-0AC1-A228-5C07-0F4F870867C2}</Project>

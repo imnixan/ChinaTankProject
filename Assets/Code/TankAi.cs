@@ -167,7 +167,6 @@ public class TankAi : MonoBehaviour
                     {
                         shootTime = Time.time + aimTime / 2;
                         aiming = true;
-                        Debug.Log($"{gameObject.name} start aiming base");
                     }
                     if (aiming && shootTime <= Time.time)
                     {
@@ -205,7 +204,6 @@ public class TankAi : MonoBehaviour
                 {
                     shootTime = Time.time + aimTime;
                     aiming = true;
-                    Debug.Log($"{gameObject.name} start aiming player");
                 }
                 if (aiming && shootTime <= Time.time)
                 {

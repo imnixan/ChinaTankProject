@@ -7,14 +7,12 @@ public class LevelManager : MonoBehaviour
     private GameObject enemyPrefab;
 
     [SerializeField]
-    private GameObject[] bonuses;
-
-    [SerializeField]
     private GameObject[] spawnPoints;
 
     [SerializeField]
-    private int EnemyLeft;
+    public int EnemyLeft;
 
+    private GameManager gm;
     private List<TankAi> tanks = new List<TankAi>();
 
     public int idleTime,
@@ -23,6 +21,7 @@ public class LevelManager : MonoBehaviour
 
     public void InitLevel(int idleTime, int searchingTime, float aimTime)
     {
+        this.gm = FindAnyObjectByType<GameManager>();
         this.idleTime = idleTime;
         this.searchingTime = searchingTime;
         this.aimTime = aimTime;
@@ -49,9 +48,9 @@ public class LevelManager : MonoBehaviour
         {
             SpawnTank(spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position);
         }
-        else
+        else if (tanks.Count <= 0)
         {
-            Debug.Log("WIN");
+            gm.WinGame();
         }
     }
 
