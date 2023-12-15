@@ -1520,6 +1520,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8375212304963734667}
   - component: {fileID: 8375212304963734664}
+  - component: {fileID: -880393622500933570}
   m_Layer: 0
   m_Name: Level1
   m_TagString: Untagged
@@ -1560,6 +1561,27 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &-880393622500933570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8375212304963734665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cfdcef1e7bbe4f87a320463d164972a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 3811850537062345796, guid: f354c34161524704fb4e03d1ae3770e9, type: 3}
+  bonuses: []
+  spawnPoints:
+  - {fileID: 8375212306026911982}
+  - {fileID: 8375212304308249528}
+  EnemyLeft: 5
+  idleTime: 20
+  searchingTime: 10
+  aimTime: 0.5
 --- !u!1 &8375212304965837677
 GameObject:
   m_ObjectHideFlags: 0

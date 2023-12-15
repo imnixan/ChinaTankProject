@@ -13,10 +13,11 @@ GameObject:
   - component: {fileID: 3811850537062345803}
   - component: {fileID: 3811850537062345800}
   - component: {fileID: 3811850537062345801}
-  - component: {fileID: 5128136717888962995}
   - component: {fileID: 1817754483054878653}
   - component: {fileID: 9221826668955367281}
   - component: {fileID: 289329731457306613}
+  - component: {fileID: 779029673652713664}
+  - component: {fileID: 2885888161986251199}
   m_Layer: 7
   m_Name: EnemyTank
   m_TagString: Tank
@@ -95,6 +96,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   playerBase: {fileID: 0}
+  explosion: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5, type: 3}
+  maxVertZone: 0
+  maxHorZone: 0
+  yDistance: 0
+  xDistance: 0
 --- !u!61 &3811850537062345800
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -142,19 +148,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5128136717888962995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3811850537062345796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adcd8cc9435142243b81d0905a0c6672, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  explosion: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5, type: 3}
 --- !u!114 &1817754483054878653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +186,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16f52951f94b1b4880de2f12bd6b190, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &779029673652713664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811850537062345796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd9b181fa3ac2bd45ab5263a576c79eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+--- !u!114 &2885888161986251199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811850537062345796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c53870da9fe0d534ba613bfd5696abcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectile: {fileID: 0}
+  lastShot: 0
 --- !u!1 &3811850537571681341
 GameObject:
   m_ObjectHideFlags: 0

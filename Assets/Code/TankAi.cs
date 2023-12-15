@@ -1,12 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TankAi : MonoBehaviour
 {
+    public static event UnityAction<TankAi> TankExploded;
+
     [SerializeField]
     private Transform player,
         playerBase;
+
+    [SerializeField]
+    private GameObject explosion;
 
     private int idleTime = 20;
     private int searchingTime = 20;
@@ -33,9 +39,13 @@ public class TankAi : MonoBehaviour
     private TankMover tankMover;
     public float yDistance,
         xDistance;
+    private bool initiated;
 
-    private void Start()
+    public void Init(int idleTime, int searchingTime, float aimTime)
     {
+        this.idleTime = idleTime;
+        this.searchingTime = searchingTime;
+        this.aimTime = aimTime;
         Vector2 camsize = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
         maxHorZone = camsize.x;
         maxVertZone = camsize.y;
@@ -61,6 +71,7 @@ public class TankAi : MonoBehaviour
         BaseSearcher baseSearhcer = GetComponent<BaseSearcher>();
         baseSearhcer.Init(player, player, target);
         controllers.Add(BehaviourState.SearchingBase, baseSearhcer);
+        initiated = true;
     }
 
     IEnumerator IdleTimer()
@@ -102,29 +113,32 @@ public class TankAi : MonoBehaviour
 
     private void Update()
     {
-        xDistance = Mathf.Abs(player.position.x - transform.position.x);
-        yDistance = Mathf.Abs(player.position.y - transform.position.y);
-        if (yDistance < maxVertZone && xDistance < maxHorZone)
+        if (initiated && player && playerBase)
         {
-            hit = Physics2D.Raycast(
-                transform.position,
-                player.position - transform.position,
-                Mathf.Infinity,
-                ignoreLayer
-            );
+            xDistance = Mathf.Abs(player.position.x - transform.position.x);
+            yDistance = Mathf.Abs(player.position.y - transform.position.y);
+            if (yDistance < maxVertZone && xDistance < maxHorZone)
+            {
+                hit = Physics2D.Raycast(
+                    transform.position,
+                    player.position - transform.position,
+                    Mathf.Infinity,
+                    ignoreLayer
+                );
 
-            if (hit.collider != null)
-            {
-                CheckPlayer(hit);
-                return;
+                if (hit.collider != null)
+                {
+                    CheckPlayer(hit);
+                    return;
+                }
             }
-        }
-        else
-        {
-            CheckBase();
-            if (!controllers[currentState].enabled)
+            else
             {
-                controllers[currentState].Play();
+                CheckBase();
+                if (!controllers[currentState].enabled)
+                {
+                    controllers[currentState].Play();
+                }
             }
         }
     }
@@ -207,6 +221,16 @@ public class TankAi : MonoBehaviour
         else
         {
             CheckBase();
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("projectile"))
+        {
+            TankExploded?.Invoke(this);
+            Instantiate(explosion, transform.position, new Quaternion());
+            Destroy(gameObject);
         }
     }
 }
