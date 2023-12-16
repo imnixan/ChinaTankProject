@@ -1,40 +1,58 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Attacker : MonoBehaviour
 {
     [SerializeField]
     private Projectile projectile;
 
-    public float lastShot;
+    [SerializeField]
+    private GunReload gr;
 
-    private float recharge = 1.5f;
-    public bool CanAttack
+    public bool canAttack;
+
+    private void Start()
     {
-        get { return lastShot + recharge < Time.time; }
+        canAttack = true;
     }
 
     public void Fire()
     {
-        if (CanAttack)
+        if (canAttack)
         {
             Vector2 direction = transform.up * 100;
             Instantiate(projectile, transform.position + transform.up * 0.5f, new Quaternion())
                 .Shoot(direction);
-            lastShot = Time.time;
+            StartCoroutine(Reload());
+            if (gr != null)
+            {
+                gr.TurnOn();
+            }
         }
+    }
+
+    IEnumerator Reload()
+    {
+        canAttack = false;
+        for (float i = 0; i <= 1.5f; i += 0.1f)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        canAttack = true;
     }
 
     public void Fire(Vector2 direction)
     {
-        if (CanAttack)
+        if (canAttack)
         {
             Instantiate(projectile, transform.position + transform.up * 0.5f, new Quaternion())
                 .Shoot(direction * 100);
-            lastShot = Time.time;
+            StartCoroutine(Reload());
         }
     }
 }

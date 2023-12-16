@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class TankAi : MonoBehaviour
 {
     public static event UnityAction<TankAi> TankExploded;
+    public static event UnityAction tankAimed;
 
     [SerializeField]
     private Transform player,
@@ -161,7 +162,7 @@ public class TankAi : MonoBehaviour
                     playerBase.transform.position - transform.position
                 ).normalized;
                 transform.right = Vector2.MoveTowards(transform.right, directionView, 0.01f);
-                if ((Vector2)transform.right == directionView && attacker.CanAttack)
+                if ((Vector2)transform.right == directionView && attacker.canAttack)
                 {
                     if (!aiming)
                     {
@@ -198,12 +199,13 @@ public class TankAi : MonoBehaviour
             controllers[currentState].Stop();
             Vector2 directionView = (player.transform.position - transform.position).normalized;
             transform.right = Vector2.MoveTowards(transform.right, directionView, 0.01f);
-            if ((Vector2)transform.right == directionView && attacker.CanAttack)
+            if ((Vector2)transform.right == directionView && attacker.canAttack)
             {
                 if (!aiming)
                 {
                     shootTime = Time.time + aimTime;
                     aiming = true;
+                    tankAimed?.Invoke();
                 }
                 if (aiming && shootTime <= Time.time)
                 {

@@ -6,7 +6,9 @@ public class PlayerMain : MonoBehaviour
 {
     [SerializeField]
     private GameObject explosion,
-        flash;
+        flash,
+        shieldEffect,
+        warning;
 
     [SerializeField]
     private GameManager gm;
@@ -46,13 +48,14 @@ public class PlayerMain : MonoBehaviour
             else
             {
                 Instantiate(explosion, transform.position, new Quaternion());
-                gm.PlayerDead(this);
+                gm.PlayerDead();
             }
         }
     }
 
     public void TurnOnShield()
     {
+        Instantiate(shieldEffect, transform.position, new Quaternion());
         shield.Play();
         StartCoroutine(ShieldTime());
     }
@@ -61,5 +64,27 @@ public class PlayerMain : MonoBehaviour
     {
         transform.position = spawnPoint;
         TurnOnShield();
+    }
+
+    public void OnEnable()
+    {
+        TankAi.tankAimed += OnTankAimed;
+    }
+
+    public void OnDisable()
+    {
+        TankAi.tankAimed -= OnTankAimed;
+    }
+
+    private float lastWarning;
+    private float warningPause = 1f;
+
+    private void OnTankAimed()
+    {
+        if (lastWarning + warningPause <= Time.time)
+        {
+            lastWarning = Time.time;
+            Instantiate(warning, (Vector2)transform.position + Vector2.up, new Quaternion());
+        }
     }
 }

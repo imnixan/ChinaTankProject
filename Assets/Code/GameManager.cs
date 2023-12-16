@@ -2,21 +2,35 @@
 using System.Collections;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] levels;
+
+    [SerializeField]
+    private Image levelStatus;
     private int currentLevel;
     private int playerHp;
     private int playerCoins;
     private int round;
     private int tanksLeft;
+    private int totalTanks;
+
+    [SerializeField]
+    private GameObject uiCanvas,
+        recordTable;
+
+    [SerializeField]
+    private RectTransform pauseWindow,
+        winWindow,
+        loseWindow;
 
     [SerializeField]
     private TextMeshProUGUI coinsCounter,
         livesCounter,
-        tanksCounter,
         roundScreen;
 
     private void Awake()
@@ -25,8 +39,11 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 300;
     }
 
+    private PlayerMain player;
+
     private void Start()
     {
+        player = FindAnyObjectByType<PlayerMain>();
         playerCoins = PlayerPrefs.GetInt("Coins");
         currentLevel = PlayerPrefs.GetInt("CurrentLevel");
         round = PlayerPrefs.GetInt("Round");
@@ -48,11 +65,12 @@ public class GameManager : MonoBehaviour
             aimTime = 0.15f;
         }
         LevelManager level = Instantiate(levels[currentLevel]).GetComponent<LevelManager>();
-        level.InitLevel(idleTime, searchingTime, aimTime);
         tanksLeft = level.EnemyLeft;
+        totalTanks = tanksLeft;
+        level.InitLevel(idleTime, searchingTime, aimTime);
         coinsCounter.text = playerCoins.ToString();
         livesCounter.text = playerHp.ToString();
-        tanksCounter.text = tanksLeft.ToString();
+        levelStatus.fillAmount = ((float)totalTanks - (float)tanksLeft) / (float)totalTanks;
         roundScreen.text = $"{round + 1}-{currentLevel + 1}";
     }
 
@@ -70,11 +88,11 @@ public class GameManager : MonoBehaviour
     {
         tanksLeft--;
         playerCoins++;
-        tanksCounter.text = tanksLeft.ToString();
+        levelStatus.fillAmount = ((float)totalTanks - (float)tanksLeft) / (float)totalTanks;
         coinsCounter.text = playerCoins.ToString();
     }
 
-    public void PlayerDead(PlayerMain player)
+    public void PlayerDead()
     {
         playerHp--;
         livesCounter.text = playerHp.ToString();
@@ -93,6 +111,24 @@ public class GameManager : MonoBehaviour
 
     public void LoseGame()
     {
+        uiCanvas.SetActive(false);
+        loseWindow.DOAnchorPosX(0, 0.5f);
+        int oldRecord = PlayerPrefs.GetInt("Record", 11);
+        int current = (round + 1) * 10 + (currentLevel + 1);
+        if (current > oldRecord)
+        {
+            PlayerPrefs.SetInt("Record", current);
+            PlayerPrefs.Save();
+            recordTable.SetActive(true);
+        }
+        else
+        {
+            recordTable.SetActive(false);
+        }
+    }
+
+    public void Restart()
+    {
         PlayerPrefs.SetInt("Coins", 0);
         PlayerPrefs.SetInt("CurrentLevel", 0);
         PlayerPrefs.SetInt("Round", 0);
@@ -104,8 +140,8 @@ public class GameManager : MonoBehaviour
 
     public void WinGame()
     {
-        Debug.Log("WInGame");
-        NextLevel();
+        uiCanvas.SetActive(false);
+        winWindow.DOAnchorPosX(0, 0.5f);
     }
 
     public void NextLevel()
@@ -122,5 +158,62 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("Coins", playerCoins);
         PlayerPrefs.Save();
         SceneManager.LoadScene("GameScene");
+    }
+
+    public void BuyHP()
+    {
+        if (playerCoins >= 1)
+        {
+            playerCoins -= 1;
+            playerHp++;
+            livesCounter.text = playerHp.ToString();
+            coinsCounter.text = playerCoins.ToString();
+        }
+    }
+
+    public void BuyShield()
+    {
+        if (playerCoins >= 1)
+        {
+            playerCoins -= 1;
+            player.TurnOnShield();
+            coinsCounter.text = playerCoins.ToString();
+        }
+    }
+
+    public void Pause()
+    {
+        if (Time.timeScale == 1)
+        {
+            SetPause();
+        }
+        else if (Time.timeScale == 0)
+        {
+            UnPause();
+        }
+    }
+
+    private void SetPause()
+    {
+        uiCanvas.SetActive(false);
+        Sequence pause = DOTween
+            .Sequence()
+            .Append(pauseWindow.DOAnchorPosY(0, 0.2f))
+            .AppendCallback(() =>
+            {
+                Time.timeScale = 0;
+            });
+    }
+
+    public void UnPause()
+    {
+        uiCanvas.SetActive(true);
+        Time.timeScale = 1;
+        Sequence pause = DOTween.Sequence().Append(pauseWindow.DOAnchorPosY(2000, 0.2f));
+    }
+
+    public void Menu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }
