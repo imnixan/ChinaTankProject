@@ -34,6 +34,13 @@ public class Attacker : MonoBehaviour
             Vector2 direction = transform.up * 100;
             Instantiate(projectile, transform.position + transform.up * 0.5f, new Quaternion())
                 .Shoot(direction);
+            if (PlayerPrefs.GetInt("Sound", 1) == 1)
+            {
+                AudioSource.PlayClipAtPoint(
+                    tankShots[Random.Range(0, tankShots.Length)],
+                    transform.position
+                );
+            }
             StartCoroutine(Reload());
             if (gr != null)
             {
@@ -62,7 +69,7 @@ public class Attacker : MonoBehaviour
             {
                 AudioSource.PlayClipAtPoint(
                     tankShots[Random.Range(0, tankShots.Length)],
-                    Vector3.zero
+                    transform.position
                 );
             }
             StartCoroutine(Reload());
