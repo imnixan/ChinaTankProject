@@ -112,7 +112,7 @@ public class TankAi : MonoBehaviour
         controllers[currentState].Play();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (initiated && player && playerBase)
         {
@@ -161,7 +161,7 @@ public class TankAi : MonoBehaviour
                 Vector2 directionView = (
                     playerBase.transform.position - transform.position
                 ).normalized;
-                transform.right = Vector2.MoveTowards(transform.right, directionView, 0.01f);
+                transform.right = Vector2.MoveTowards(transform.right, directionView, 0.02f);
                 if ((Vector2)transform.right == directionView && attacker.canAttack)
                 {
                     if (!aiming)
@@ -198,7 +198,7 @@ public class TankAi : MonoBehaviour
         {
             controllers[currentState].Stop();
             Vector2 directionView = (player.transform.position - transform.position).normalized;
-            transform.right = Vector2.MoveTowards(transform.right, directionView, 0.01f);
+            transform.right = Vector2.MoveTowards(transform.right, directionView, 0.02f);
             if ((Vector2)transform.right == directionView && attacker.canAttack)
             {
                 if (!aiming)

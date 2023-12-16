@@ -46,7 +46,7 @@ public class PlayerMain : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("projectile"))
+        if (collision.collider.CompareTag("projectile") || collision.collider.CompareTag("Tank"))
         {
             Handheld.Vibrate();
             if (shield.isPlaying)

@@ -140,7 +140,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 1000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -220,6 +220,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8317386292370de4fbeac78084993e6c, type: 3}
   - {fileID: 8300000, guid: ebdcfdd30e734ff4e9e79f2a09b82c5a, type: 3}
   - {fileID: 8300000, guid: f8a63e56ddb21a44991ac3b622b7d559, type: 3}
+  reload: {fileID: 0}
   canAttack: 0
 --- !u!1 &3811850537571681341
 GameObject:
