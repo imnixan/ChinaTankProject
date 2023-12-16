@@ -12,6 +12,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     public int EnemyLeft;
 
+    [SerializeField]
+    private int enemyStart;
+
     private GameManager gm;
     private List<TankAi> tanks = new List<TankAi>();
 
@@ -25,9 +28,9 @@ public class LevelManager : MonoBehaviour
         this.idleTime = idleTime;
         this.searchingTime = searchingTime;
         this.aimTime = aimTime;
-        foreach (var spawnPoint in spawnPoints)
+        for (int i = 0; i < enemyStart; i++)
         {
-            SpawnTank(spawnPoint.transform.position);
+            SpawnTank(spawnPoints[i].transform.position);
         }
     }
 

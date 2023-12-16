@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Kino;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,9 @@ public class PlayerMain : MonoBehaviour
 
     [SerializeField]
     private GameManager gm;
+
+    [SerializeField]
+    private AudioClip warningSound;
 
     private Vector2 spawnPoint = new Vector2(0, -2.5f);
 
@@ -36,17 +40,30 @@ public class PlayerMain : MonoBehaviour
         shield.Stop();
     }
 
+    [SerializeField]
+    private AudioClip boom,
+        shieldSound;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("projectile"))
         {
+            Handheld.Vibrate();
             if (shield.isPlaying)
             {
+                if (PlayerPrefs.GetInt("Sound", 1) == 1)
+                {
+                    AudioSource.PlayClipAtPoint(shieldSound, Vector3.zero);
+                }
                 Instantiate(flash, transform.position, new Quaternion());
                 shield.Stop();
             }
             else
             {
+                if (PlayerPrefs.GetInt("Sound", 1) == 1)
+                {
+                    AudioSource.PlayClipAtPoint(boom, Vector3.zero);
+                }
                 Instantiate(explosion, transform.position, new Quaternion());
                 gm.PlayerDead();
             }
@@ -84,6 +101,10 @@ public class PlayerMain : MonoBehaviour
         if (lastWarning + warningPause <= Time.time)
         {
             lastWarning = Time.time;
+            if (PlayerPrefs.GetInt("Sound", 1) == 1)
+            {
+                AudioSource.PlayClipAtPoint(warningSound, Vector3.zero);
+            }
             Instantiate(warning, (Vector2)transform.position + Vector2.up, new Quaternion());
         }
     }

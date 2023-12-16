@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using Kino;
 
 public class GameManager : MonoBehaviour
 {
@@ -77,11 +78,14 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         TankAi.TankExploded += OnEnemyDead;
+        PlayerBase.baseDestoyed += LoseGame;
     }
 
     private void OnDisable()
     {
         TankAi.TankExploded -= OnEnemyDead;
+        PlayerBase.baseDestoyed -= LoseGame;
+        Time.timeScale = 1;
     }
 
     private void OnEnemyDead(TankAi tank)
@@ -162,20 +166,31 @@ public class GameManager : MonoBehaviour
 
     public void BuyHP()
     {
-        if (playerCoins >= 1)
+        if (playerCoins >= 15)
         {
-            playerCoins -= 1;
+            if (PlayerPrefs.GetInt("Sound", 1) == 1)
+            {
+                AudioSource.PlayClipAtPoint(buySound, Vector3.zero);
+            }
+            playerCoins -= 15;
             playerHp++;
             livesCounter.text = playerHp.ToString();
             coinsCounter.text = playerCoins.ToString();
         }
     }
 
+    [SerializeField]
+    private AudioClip buySound;
+
     public void BuyShield()
     {
-        if (playerCoins >= 1)
+        if (playerCoins >= 7)
         {
-            playerCoins -= 1;
+            if (PlayerPrefs.GetInt("Sound", 1) == 1)
+            {
+                AudioSource.PlayClipAtPoint(buySound, Vector3.zero);
+            }
+            playerCoins -= 7;
             player.TurnOnShield();
             coinsCounter.text = playerCoins.ToString();
         }

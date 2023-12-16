@@ -99,6 +99,7 @@
     <Compile Include="Assets\Code\PlayerMain.cs" />
     <Compile Include="Assets\Code\LevelManager.cs" />
     <Compile Include="Assets\Code\GunReload.cs" />
+    <Compile Include="Assets\Code\GameMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

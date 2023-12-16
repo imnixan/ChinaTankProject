@@ -224,12 +224,20 @@ public class TankAi : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    private AudioClip boom;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("projectile"))
         {
             TankExploded?.Invoke(this);
             Instantiate(explosion, transform.position, new Quaternion());
+            Handheld.Vibrate();
+            if (PlayerPrefs.GetInt("Sound", 1) == 1)
+            {
+                AudioSource.PlayClipAtPoint(boom, Vector3.zero);
+            }
             Destroy(gameObject);
         }
     }
