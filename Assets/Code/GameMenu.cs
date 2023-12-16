@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
+using System.Buffers;
+using System.Collections;
 
 public class GameMenu : MonoBehaviour
 {
@@ -14,8 +17,17 @@ public class GameMenu : MonoBehaviour
     private GameObject banSound,
         banMusic;
 
+    [SerializeField]
+    private Image loadingScreen,
+        bar;
+    private GameStartManager gsm;
+
     private void Start()
     {
+        gsm = GetComponent<GameStartManager>();
+        loadingScreen.color = new Color(0, 0, 0, 0);
+        bar.fillAmount = 0;
+        loadingScreen.gameObject.SetActive(false);
         Screen.orientation = ScreenOrientation.Portrait;
         banMusic.SetActive(PlayerPrefs.GetInt("Music", 1) != 1);
         banSound.SetActive(PlayerPrefs.GetInt("Sound", 1) != 1);
@@ -23,13 +35,13 @@ public class GameMenu : MonoBehaviour
 
     public void Settings()
     {
-        if (settingsLine.anchoredPosition.x == 0)
+        if (settingsLine.anchoredPosition.x >= -50)
         {
-            settingsLine.DOAnchorPosX(-600, 0.5f);
+            settingsLine.DOAnchorPosX(-600, 0.2f);
         }
-        else if (settingsLine.anchoredPosition.x == -600)
+        else if (settingsLine.anchoredPosition.x <= -550)
         {
-            settingsLine.DOAnchorPosX(0, 0.5f);
+            settingsLine.DOAnchorPosX(0, 0.23f);
         }
     }
 
@@ -47,5 +59,28 @@ public class GameMenu : MonoBehaviour
         PlayerPrefs.SetInt("Sound", newSound);
         PlayerPrefs.Save();
         banSound.SetActive(newSound != 1);
+    }
+
+    public void PlayGame()
+    {
+        loadingScreen.gameObject.SetActive(true);
+        Sequence loadShow = DOTween
+            .Sequence()
+            .Append(loadingScreen.DOColor(Color.white, 0.5f))
+            .AppendCallback(() =>
+            {
+                StartCoroutine(LadingScreen());
+            });
+    }
+
+    IEnumerator LadingScreen()
+    {
+        WaitForSeconds timer = new WaitForSeconds(0.01f);
+        for (float i = 0; i <= 1f; i += 0.01f)
+        {
+            bar.fillAmount = i;
+            yield return timer;
+        }
+        gsm.StartGame();
     }
 }

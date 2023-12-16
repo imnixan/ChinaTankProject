@@ -12,6 +12,6 @@ public class GameStartManager : MonoBehaviour
         PlayerPrefs.SetInt("HP", 3);
         PlayerPrefs.SetInt("Coins", 0);
         PlayerPrefs.Save();
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadSceneAsync("GameScene");
     }
 }
