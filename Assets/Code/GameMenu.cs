@@ -7,6 +7,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 using System.Buffers;
 using System.Collections;
+using TMPro;
 
 public class GameMenu : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class GameMenu : MonoBehaviour
     private Image loadingScreen,
         bar;
     private GameStartManager gsm;
+
+    [SerializeField]
+    private TextMeshProUGUI recordShow;
 
     private void Start()
     {
@@ -64,6 +68,8 @@ public class GameMenu : MonoBehaviour
     public void PlayGame()
     {
         loadingScreen.gameObject.SetActive(true);
+        int record = PlayerPrefs.GetInt("Record", 11);
+        recordShow.text = $"{Mathf.Round(record / 10)}-{Mathf.Round(record % 10)}";
         Sequence loadShow = DOTween
             .Sequence()
             .Append(loadingScreen.DOColor(Color.white, 0.5f))

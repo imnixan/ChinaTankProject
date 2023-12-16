@@ -530,6 +530,7 @@ MonoBehaviour:
   banMusic: {fileID: 937364842}
   loadingScreen: {fileID: 374775550}
   bar: {fileID: 85371462}
+  recordShow: {fileID: 1133727412}
 --- !u!114 &291256635
 MonoBehaviour:
   m_ObjectHideFlags: 0
