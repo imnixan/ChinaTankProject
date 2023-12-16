@@ -41,9 +41,15 @@ public class GameManager : MonoBehaviour
     }
 
     private PlayerMain player;
+    private AudioSource sound;
 
     private void Start()
     {
+        sound = GetComponent<AudioSource>();
+        if (PlayerPrefs.GetInt("Music", 1) == 1)
+        {
+            sound.Play();
+        }
         player = FindAnyObjectByType<PlayerMain>();
         playerCoins = PlayerPrefs.GetInt("Coins");
         currentLevel = PlayerPrefs.GetInt("CurrentLevel");

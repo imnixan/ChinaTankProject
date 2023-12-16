@@ -65,6 +65,7 @@
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Scripts\CFX_AutoRotate.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Demo\Assets\CFX_AutoStopLoopedEffect.cs" />
     <Compile Include="Assets\Code\TankController.cs" />
+    <Compile Include="Assets\Code\PlayerMain.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Demo\Assets\CFX_Demo_RandomDir.cs" />
     <Compile Include="Assets\Code\Projectile.cs" />
     <Compile Include="Assets\Code\BaseSearcher.cs" />
@@ -81,25 +82,24 @@
     <Compile Include="Assets\SAP2D\Resources\Main\System\SAP2DAgent.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\System\SAP2DPathfindingConfig.cs" />
     <Compile Include="Assets\Code\Attacker.cs" />
+    <Compile Include="Assets\Code\GameMenu.cs" />
     <Compile Include="Assets\Code\PlayerSearcher.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\System\SAP2DPathfinder.cs" />
     <Compile Include="Assets\Code\TankIdler.cs" />
+    <Compile Include="Assets\Code\GunReload.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Demo\Assets\CFX_Demo_RandomDirectionTranslate.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\System\SAP2DEditorSettings.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FloatingJoystick.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Demo\Assets\CFX_Demo_Translate.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\System\Grid\SAP_GraphDrawer.cs" />
+    <Compile Include="Assets\Code\GameStartManager.cs" />
     <Compile Include="Assets\Code\GameManager.cs" />
     <Compile Include="Assets\Code\PlayerBase.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Demo\Assets\CFX_Demo_New.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Scripts\CFX_LightFlicker.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\System\Singleton.cs" />
     <Compile Include="Assets\SAP2D\Resources\Main\System\SAP2DDynamicObstacle.cs" />
-    <Compile Include="Assets\Code\GameStartManager.cs" />
-    <Compile Include="Assets\Code\PlayerMain.cs" />
     <Compile Include="Assets\Code\LevelManager.cs" />
-    <Compile Include="Assets\Code\GunReload.cs" />
-    <Compile Include="Assets\Code\GameMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -387,11 +387,11 @@
     <Reference Include="Unity.Burst.Cecil.Rocks">
       <HintPath>Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.8.0\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="DOTween">
       <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.8.0\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.23f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
@@ -837,6 +837,10 @@
       <Project>{B1DDFCBA-AFD6-5897-18CB-34A0FE1A24A1}</Project>
       <Name>Unity.VisualScripting.State.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="KinoBloom.Runtime.csproj">
+      <Project>{E4398A57-F3ED-49B8-65B0-1A6B1E5ACC9A}</Project>
+      <Name>KinoBloom.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Burst.Editor.csproj">
       <Project>{CDCB71F5-F822-1565-944E-663DEE69588F}</Project>
       <Name>Unity.Burst.Editor</Name>
@@ -861,10 +865,6 @@
       <Project>{E125B21F-8BFA-51C7-544C-6AA926942DA5}</Project>
       <Name>Unity.2D.Psdimporter.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="KinoBloom.Runtime.csproj">
-      <Project>{E4398A57-F3ED-49B8-65B0-1A6B1E5ACC9A}</Project>
-      <Name>KinoBloom.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="CFXRDemo.csproj">
       <Project>{C9657E51-5699-3333-E2EC-F48FF4A78245}</Project>
       <Name>CFXRDemo</Name>
@@ -872,6 +872,10 @@
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{6CB54769-1BAC-EF33-72C0-4F6DB447E11E}</Project>
       <Name>UnityEditor.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.2D.Tilemap.Extras.Editor.csproj">
+      <Project>{DC93A3D9-C55E-C8A1-F8C7-5474C647A319}</Project>
+      <Name>Unity.2D.Tilemap.Extras.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.InternalAPIEditorBridge.001.csproj">
       <Project>{C8C3B642-D34F-3EC2-E4A6-D6A29E47188C}</Project>
@@ -881,17 +885,13 @@
       <Project>{A57EC092-FAA3-3BF5-2D97-4F176B20A886}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.2D.Tilemap.Extras.Editor.csproj">
-      <Project>{DC93A3D9-C55E-C8A1-F8C7-5474C647A319}</Project>
-      <Name>Unity.2D.Tilemap.Extras.Editor</Name>
+    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
+      <Project>{AB31B5E1-EEF4-B295-A144-6D042A77D182}</Project>
+      <Name>Unity.2D.Sprite.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.Flow.csproj">
       <Project>{FAFAC807-DC2F-BFB4-0124-491DB62DD033}</Project>
       <Name>Unity.VisualScripting.Flow</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
-      <Project>{AB31B5E1-EEF4-B295-A144-6D042A77D182}</Project>
-      <Name>Unity.2D.Sprite.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.Core.csproj">
       <Project>{88F276E1-0AC1-A228-5C07-0F4F870867C2}</Project>
